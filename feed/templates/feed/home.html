@@ -1,0 +1,68 @@
+{% extends "feed/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+	<div class="dropdown">
+
+  <!--Trigger-->
+  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
+    aria-haspopup="true" aria-expanded="false">Search By A Tag</button>
+
+
+  <!--Menu-->
+  <div class="dropdown-menu dropdown-primary">
+    {% for tag in tags %}
+	    <a class="dropdown-item" href="{% url 'tag-posts' tag %}">{{ tag }}</a>
+<!-- 	    <a class="dropdown-item" href="#">Another action</a>
+	    <a class="dropdown-item" href="#">Something else here</a>
+	    <a class="dropdown-item" href="#">Separated link</a> -->
+	    {% endfor %}
+  </div>
+</div>
+
+	<br>
+	<br>
+
+
+	<!-- <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Search with Tags</legend>
+                {{ form | crispy }}
+            </fieldset>
+            <div class="form-group">
+                <a class="btn btn-outline-info" href="#" type="submit">tag</a>
+            	
+            </div>
+        </form>
+    </div> -->
+
+    <br>
+    <br>
+
+	{% for post in posts %}  
+
+		<article class="media content-section">
+			<img class = "rounded-circle article-img" src="{{ post.created_by.profile.image.url }}">
+		  <div class="media-body">
+		    <div class="article-metadata">
+		      <a class="mr-2" href="{% url 'user-posts' post.created_by.username %}">{{ post.created_by }}</a>
+		      <small class="text-muted">{{ post.date_of_creation|date:"F d, Y" }}</small>
+		    </div>
+		    <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+		    <p class="article-content">Estimated Budget: {{ post.estimate_budget }}</p>
+		    <p class="article-content">Status: {{post.status }}</p>
+		  </div>
+		</article>                
+		<!-- <h1>{{ post.title }}</h1>
+		                  double curly braces are to access a variable  
+		<p> By {{ post.author }} on {{ post.date_posted }}</p>
+		<p> {{ post.content }} </p> -->
+
+	{% endfor %}
+	{% include "feed/pagination.html" %}
+
+{% endblock content %} 
+<!-- simple, endblock can also be used but case off multiple blocks used, we might lose sight of which block is being closed. -->
+

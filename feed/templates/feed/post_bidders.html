@@ -1,0 +1,19 @@
+{% extends "feed/base.html" %}
+{% block content %}
+    <h1 class="mb-3">Bidders-({{ page_obj.paginator.count }})</h1>
+    {% for bidder in bidders %}
+        <article class="media content-section">
+          <img class="rounded-circle article-img" src="{{ bidder.username.profile.image.url }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="{% url 'user-posts' bidder.username.username %}">{{ bidder.username }}</a>
+            </div>
+          </div>
+          <div>
+              <p class="text-left">Predicted Completion Date: {{ bidder.date_of_completion|date:"F d, Y" }}</p>
+              <p class="text-left"> Required Budget: {{ bidder.budget}} </p>
+          </div>
+        </article>
+    {% endfor %}
+    {% include "feed/pagination.html" %}
+{% endblock content %}

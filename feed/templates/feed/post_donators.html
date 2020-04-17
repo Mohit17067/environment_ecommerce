@@ -1,0 +1,19 @@
+{% extends "feed/base.html" %}
+{% block content %}
+    <h1 class="mb-3">Donators-({{ page_obj.paginator.count }})</h1>
+    {% for donator in donators %}
+        <article class="media content-section">
+          <img class="rounded-circle article-img" src="{{ donator.username.profile.image.url }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="{% url 'user-posts' donator.username.username %}">{{ donator.username }}</a>
+            </div>
+          </div>
+          <div>
+              <p class="text-left">Funding Date: {{ donator.date_of_funding|date:"F d, Y" }}</p>
+              <p class="text-left"> Amount Donated: {{ donator.fund }} </p>
+          </div>
+        </article>
+    {% endfor %}
+    {% include "feed/pagination.html" %}
+{% endblock content %}

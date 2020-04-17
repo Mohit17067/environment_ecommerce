@@ -1,0 +1,30 @@
+{% extends "feed/base.html" %}
+{% block content %}
+  <article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ object.created_by.profile.image.url }}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="{% url 'user-posts' object.created_by.username %}">{{ object.created_by }}</a>
+        <small class="text-muted">{{ object.date_of_creation|date:"F d, Y" }}</small>
+        <small class="text-muted">{{ object.tags }}</small>
+        <a class="btn btn-info btn-sm mt-1 mb-1 float-right" href="{% url 'show-bidders' object.id %}">Show Bidders</a>
+        <a class="btn btn-info btn-sm mt-1 mb-1 float-right" href="{% url 'show-donators' object.id %}">Show Donators</a>
+        {% if object.created_by == user %}
+          <div>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' object.id %}">Update</a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' object.id %}">Delete</a>
+          </div>
+        {% endif %}
+        <div>
+          <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'post-bid' object.id %}">Bid</a>
+          <a class="btn btn-success btn-sm mt-1 mb-1" href="{% url 'post-donate' object.id %}">Donate</a>
+        </div>
+      </div>
+      <h2 class="article-title">{{ object.title }}</h2>
+      <p class="article-content">{{ object.content }}</p>
+      <p class="article-content">Estimated Budget: {{ object.estimate_budget }}</p>
+      <p class="article-content">Estimated Completion Date: {{ object.expected_date_of_completion }}</p>
+      <p class="article-content">Status: {{object.status }}</p>
+    </div>
+  </article>
+{% endblock content %}
