@@ -190,7 +190,7 @@ class DonatorsListView(ListView):
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	model = service
-	fields = ['title', 'content', 'tags', 'estimate_budget','expected_date_of_completion']
+	fields = ['title', 'content', 'tags', 'estimate_budget','expected_date_of_completion','service_pre_Img']
 	template_name = 'feed/post_form.html'
 
 	def form_valid(self, form):

@@ -23,7 +23,7 @@ class post_form(forms.Form, forms.ModelForm):
 
 	class Meta:
 		model = service
-		fields = ['title', 'content', 'tags', 'estimate_budget', 'expected_date_of_completion']
+		fields = ['title', 'content', 'tags', 'estimate_budget', 'expected_date_of_completion','service_pre_Img']
 
 
 class provider_form(forms.ModelForm):
