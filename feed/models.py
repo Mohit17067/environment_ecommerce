@@ -14,6 +14,7 @@ class service(models.Model):
 	provider = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True,related_name="assignee")
 	estimate_budget = models.IntegerField()
 	expected_date_of_completion = models.DateTimeField()
+	service_pre_Img = models.ImageField(default='default_incomplete.png',upload_to='before_service/')
 	# author = models.ForeignKey(User,on_delete=models.CASCADE)
 
 	def __str__(self):
