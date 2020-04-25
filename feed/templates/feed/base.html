@@ -47,7 +47,7 @@
 	          		<a class="nav-item nav-link" href="{% url 'post-create' %}">New Post</a>
 	          		<a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
 	          		<a class="nav-item nav-link" href="{% url 'user-posts' user.username %}">Started By Me</a>
-	          		<a class="nav-item nav-link" href="{% url 'provider-posts' user.username %}">Done By Me</a>
+	          		<a class="nav-item nav-link" href="{% url 'provider-posts' user.username %}">Assigned to Me</a>
 	          		<a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
 	          {% else %}
 		          <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
