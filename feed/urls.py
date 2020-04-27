@@ -13,6 +13,7 @@ from .views import (
     BiddersListView,
     DonatorsListView,
     PostAssignView,
+    PostCompleteView,
 )
 from . import views
 
@@ -30,5 +31,6 @@ urlpatterns = [
     path('post/<int:pk>/update/', PostUpdateView.as_view(), name='post-update'),
     path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post-delete'),
     path('post/assign/<int:bid_id>/', PostAssignView, name='post-assign'),
+    path('post/<int:pk>/complete/', PostCompleteView.as_view(), name='post-complete'),
     path('about/', views.about, name='feed-about'),
 ]

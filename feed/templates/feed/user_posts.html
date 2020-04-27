@@ -2,17 +2,18 @@
 {% block content %}
     <h1 class="mb-3">Services - {{ view.kwargs.username }} ({{ page_obj.paginator.count }})</h1>
     {% for post in posts %}
-        <article class="media content-section">
-          <img class="rounded-circle article-img" src="{{ post.created_by.profile.image.url }}">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="{% url 'user-posts' post.created_by.username %}">{{ post.created_by }}</a>
-              <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
-            </div>
-            <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
-            <p class="article-content">{{ post.content }}</p>
-          </div>
-        </article>
+      <article class="media content-section">
+      <img class = "rounded-circle article-img" src="{{ post.created_by.profile.image.url }}">
+      <div class="media-body">
+        <div class="article-metadata">
+          <a class="mr-2" href="{% url 'user-posts' post.created_by.username %}">{{ post.created_by }}</a>
+          <small class="text-muted">{{ post.date_of_creation|date:"F d, Y" }}</small>
+        </div>
+        <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+        <p class="article-content">Estimated Budget: {{ post.estimate_budget }}</p>
+        <p class="article-content">Status: {{post.status }}</p>
+      </div>
+      </article> 
     {% endfor %}
     {% include "feed/pagination.html" %}
 {% endblock content %}

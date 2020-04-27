@@ -213,6 +213,25 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 			return True
 		return False
 
+class PostCompleteView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+	model = service
+	fields = ['complete_info', 'service_post_Img']
+	template_name = 'feed/post_form.html'
+
+	def form_valid(self, form):
+		form.instance.status = "Completed"
+		return super().form_valid(form)
+
+	def get_form(self):
+		form = super(PostCompleteView, self).get_form()
+		return form
+
+
+	def test_func(self):
+		service = self.get_object()
+		if self.request.user == service.provider:
+			return True
+		return False
 
 def PostAssignView(request, bid_id):
 	cur_bidder = bidders.objects.get(id = bid_id)
