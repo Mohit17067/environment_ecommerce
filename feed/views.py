@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.utils import timezone
 from django import forms
+from django.db.models import Q
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
@@ -41,9 +43,11 @@ class PostListView(FormMixin, ListView):
 	model = service
 	template_name = 'feed/home.html'  # <app>/<model>_<viewtype>.html
 	context_object_name = 'posts'
-	ordering = ['-date_of_creation']
 	paginate_by = 5
 	form_class = search_form
+
+	def get_queryset(self):
+		return service.objects.filter(status="Need Help").order_by('-date_of_creation')
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
@@ -94,7 +98,7 @@ class ProviderPostListView(ListView):
 
 	def get_queryset(self):
 		user = get_object_or_404(User, username=self.kwargs.get('username'))
-		return service.objects.filter(provider=user).filter(status="Completed").order_by('-date_of_creation')
+		return service.objects.filter(provider=user).filter(~Q(status="Need Help")).order_by('-date_of_creation')
 
 
 class TagPostListView(ListView):
@@ -208,6 +212,19 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 		if self.request.user == service.created_by:
 			return True
 		return False
+
+
+def PostAssignView(request, bid_id):
+	cur_bidder = bidders.objects.get(id = bid_id)
+	if (request.method == 'POST'):
+		cur_bidder.got_assigned = True
+		cur_bidder.save()
+		cur_service = cur_bidder.service
+		cur_service.status = "Assigned"
+		cur_service.provider = cur_bidder.username
+		cur_service.save()
+		return HttpResponseRedirect('/')
+	return render(request, 'feed/post_confirm_assign.html', {'bidder':cur_bidder})
 
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
