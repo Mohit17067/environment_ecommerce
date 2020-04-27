@@ -57,6 +57,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'environment_ecommerce.urls'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = "environment.ecommerce@gmail.com"
+EMAIL_HOST_PASSWORD = "xzwgygnkvlrkqset"
+EMAIL_PORT = '587'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
