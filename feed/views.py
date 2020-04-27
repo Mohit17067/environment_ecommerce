@@ -4,6 +4,8 @@ from django.http import HttpResponseRedirect
 from django.utils import timezone
 from django import forms
 from django.db.models import Q
+from django.core.mail import send_mail
+import os
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
@@ -152,6 +154,12 @@ class PostBidView(LoginRequiredMixin, CreateView):
 		Service = get_object_or_404(service, id=self.kwargs.get('pk'))
 		form.instance.service = service.objects.filter(id=Service.id).first()
 		# print(self.object.budget)
+		send_mail(
+			subject="Your Service Got A Bid!",
+			message="Hey, Congrats!, your service titled {} got a bid from {}. Refer to the website for more details.".format(Service.title,self.request.user.username),
+			recipient_list=[Service.created_by.email],
+			from_email="environment.ecommerce@gmail.com")
+
 		return super().form_valid(form)
 
 
@@ -165,6 +173,13 @@ class PostDonateView(LoginRequiredMixin, CreateView):
 		form.instance.username = self.request.user
 		Service = get_object_or_404(service, id=self.kwargs.get('pk'))
 		form.instance.service = service.objects.filter(id=Service.id).first()
+
+		send_mail(
+			subject="Your Service Got Funds!",
+			message="Hey, Congrats!, your service titled {} got a donation from {}. Refer to the website for more details.".format(Service.title,self.request.user.username),
+			recipient_list=[Service.created_by.email],
+			from_email="environment.ecommerce@gmail.com")
+
 		return super().form_valid(form)
 
 
@@ -220,6 +235,12 @@ class PostCompleteView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 	def form_valid(self, form):
 		form.instance.status = "Completed"
+		send_mail(
+			subject="Service Completed",
+			message="Your service titled {} has been completed. Refer to the website for more details.".format(form.instance.title),
+			recipient_list=[form.instance.created_by.email],
+			from_email="environment.ecommerce@gmail.com")
+
 		return super().form_valid(form)
 
 	def get_form(self):
@@ -242,6 +263,13 @@ def PostAssignView(request, bid_id):
 		cur_service.status = "Assigned"
 		cur_service.provider = cur_bidder.username
 		cur_service.save()
+
+		send_mail(
+			subject="Service Assigned",
+			message="You have been assigned a service titled {}. Refer to the website for more details.".format(cur_service.title),
+			recipient_list=[cur_bidder.username.email],
+			from_email="environment.ecommerce@gmail.com")
+
 		return HttpResponseRedirect('/')
 	return render(request, 'feed/post_confirm_assign.html', {'bidder':cur_bidder})
 
