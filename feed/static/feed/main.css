@@ -79,6 +79,19 @@ a.article-title:hover {
   margin-bottom: 16px;
 }
 
+.post-img {
+  height: 1500px;
+  width: 150px;
+  margin-right: 20px;
+  margin-bottom: 16px;
+}
+
+.img-responsive{
+  display: block;
+  max-width: 20%;
+  height: 20%;
+}
+
 .account-heading {
   font-size: 2.5rem;
 }

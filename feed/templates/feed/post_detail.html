@@ -9,6 +9,11 @@
         <small class="text-muted">{{ object.tags }}</small>
         <a class="btn btn-info btn-sm mt-1 mb-1 float-right" href="{% url 'show-bidders' object.id %}">Show Bidders</a>
         <a class="btn btn-info btn-sm mt-1 mb-1 float-right" href="{% url 'show-donators' object.id %}">Show Donators</a>
+        {% if object.provider == user and object.status == "Assigned" %}
+          <div>
+            <a class="btn btn-success mt-1 mb-1 float-right" href="{% url 'post-complete' object.id %}">Complete Service</a>
+          </div>
+        {% endif %}
         {% if object.created_by == user and object.status == "Need Help"%}
           <div>
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' object.id %}">Update</a>
@@ -22,14 +27,28 @@
           </div>
         {% endif %}
       </div>
-      <h2 class="article-title">{{ object.title }}</h2>
-      <p class="article-content">{{ object.content }}</p>
-      <p class="article-content">Estimated Budget: {{ object.estimate_budget }}</p>
-      <p class="article-content">Estimated Completion Date: {{ object.expected_date_of_completion }}</p>
-      <p class="article-content">Status: {{object.status }}</p>
-      <img class="account-img" src="{{ object.service_pre_Img.url }}">
+      <div>
+        <h2 class="article-title">{{ object.title }}</h2>
+        <p class="article-content">Description: {{ object.content }}</p>
+        <p class="article-content">Estimated Budget: {{ object.estimate_budget }}</p>
+        <p class="article-content">Estimated Completion Date: {{ object.expected_date_of_completion }}</p>
+        <img class="account-img" src="{{ object.service_pre_Img.url }}">
+        {% if object.status == "Need Help" %}
+          <p class="article-content text-danger">Status: {{object.status }}</p>
+        {% endif %}
+        {% if object.status == "Assigned" %}
+          <p class="article-content text-warning">Status: {{object.status }}</p>
+        {% endif %}
+        {% if object.status == "Completed" %}
+          <p class="article-content text-success">Status: {{object.status }}</p>
+        {% endif %}
+      </div>
+      {% if object.status == "Completed" %}
+      <div>
+        <p class="article-content">Complete Info: {{object.complete_info}}</p>
+        <img class="account-img" src="{{ object.service_post_Img.url }}">
+      </div>
+    {% endif %}
     </div>
-
-  </article>
   </article>
 {% endblock content %}
