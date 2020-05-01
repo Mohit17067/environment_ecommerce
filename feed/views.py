@@ -6,6 +6,9 @@ from django import forms
 from django.db.models import Q
 from django.core.mail import send_mail
 import os
+from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse
+from paytm import Checksum
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
@@ -32,6 +35,7 @@ from bootstrap_datepicker_plus import DatePickerInput
 # 			'mosquito-killing': 'Mosquito-killing'}
 
 all_tags = ['cleaning','planting','maintenance','grounds','parks','lakes','mosquito-killing']
+MERCHANT_KEY = 'jfCMhJQXl3QR3Bk7'
 
 def home(request):
 
@@ -168,6 +172,9 @@ class PostDonateView(LoginRequiredMixin, CreateView):
 	fields = ['fund']
 	template_name = 'feed/post_form.html'
 
+	def get_success_url(self):
+		Service = get_object_or_404(service, id=self.kwargs.get('pk'))
+		return reverse('payment-process', args=(Service.id,))
 
 	def form_valid(self, form):
 		form.instance.username = self.request.user
@@ -182,6 +189,38 @@ class PostDonateView(LoginRequiredMixin, CreateView):
 
 		return super().form_valid(form)
 
+def payment_process(request, service_id):
+	cur_service = service.objects.get(id = service_id)
+	cur_donator = donators.objects.get(service = cur_service)
+	param_dict = {
+        'MID': 'hkPHLV65903422792664',
+        'ORDER_ID': str(cur_donator.id),
+        'TXN_AMOUNT': str(cur_donator.fund),
+        'CUST_ID': cur_donator.username.email,
+        'INDUSTRY_TYPE_ID': 'Retail',
+        'WEBSITE': 'WEBSTAGING',
+        'CHANNEL_ID': 'WEB',
+        'CALLBACK_URL':'http://127.0.0.1:8000/post/handle_payment/',
+        }
+	param_dict['CHECKSUMHASH'] = Checksum.generate_checksum(param_dict, MERCHANT_KEY)
+	return render(request, 'feed/paytm.html', {'param_dict': param_dict})
+
+@csrf_exempt
+def handle_payment(request):
+	form = request.POST
+	response_dict = {}
+	for i in form.keys():
+	    response_dict[i] = form[i]
+	    if i == 'CHECKSUMHASH':
+	        checksum = form[i]
+
+	verify = Checksum.verify_checksum(response_dict, MERCHANT_KEY, checksum)
+	if verify:
+	    if response_dict['RESPCODE'] == '01':
+	        print('Donation successful')
+	    else:
+	        print('Donation was not successful because' + response_dict['RESPMSG'])
+	return render(request, 'feed/paymentstatus.html', {'response': response_dict})
 
 class BiddersListView(ListView):
 	model = bidders
