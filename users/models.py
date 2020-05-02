@@ -19,11 +19,11 @@ class Profile(models.Model):
 			set = service.objects.filter(provider=user).filter(status="Completed").filter(provider_rating__isnull=False).filter(provider_rating__total=i)
 			if(len(set)>0):
 				total += len(set)
-				sum += i
+				sum += i*len(set)
 		if(total!=0):
 			return sum/total
 		else:
-			return "No Ratings Yet"
+			return 0
 
 
 	def __str__(self):
