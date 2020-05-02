@@ -10,6 +10,8 @@ all_tags = (('cleaning', 'Cleaning'),
 			('lakes', 'Lakes'),
 			('mosquito-killing', 'Mosquito-killing'))
 
+class donate_form(forms.Form):
+	fund = forms.IntegerField()
 
 class search_form(forms.Form):
 	tags = forms.MultipleChoiceField(choices = all_tags, widget=forms.CheckboxSelectMultiple, 
