@@ -3,6 +3,10 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from taggit.managers import TaggableManager
+import star_ratings
+from django.contrib.contenttypes.fields import GenericRelation
+from star_ratings.models import Rating
+# from star_ratings import handlers
 
 class service(models.Model):
 	title = models.CharField(max_length=100)
@@ -17,7 +21,10 @@ class service(models.Model):
 	service_pre_Img = models.ImageField(default='default_incomplete.png',upload_to='before_service/')
 	complete_info = models.TextField(default="Service Completed")
 	service_post_Img = models.ImageField(default='default_incomplete.png',upload_to='after_service/')
+	feedback = models.TextField(default="No Feedback")
+	provider_rating = GenericRelation(Rating)
 	# author = models.ForeignKey(User,on_delete=models.CASCADE)
+
 
 	def __str__(self):
 		return self.title

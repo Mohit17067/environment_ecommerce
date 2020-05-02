@@ -286,6 +286,32 @@ class PostCompleteView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 		if self.request.user == service.provider:
 			return True
 		return False
+	
+
+class PostFeedbackView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+	model = service
+	fields = ['feedback']
+	template_name = 'feed/post_form.html'
+
+	def form_valid(self, form):
+		send_mail(
+			subject="Check Your Feedback",
+			message="You got a feeback for your work done on the service titled {}. Refer to the website for more details.".format(form.instance.title),
+			recipient_list=[form.instance.provider.email],
+			from_email="environment.ecommerce@gmail.com")
+
+		return super().form_valid(form)
+
+	def get_form(self):
+		form = super(PostFeedbackView, self).get_form()
+		return form
+
+
+	def test_func(self):
+		service = self.get_object()
+		if self.request.user == service.created_by:
+			return True
+		return False
 
 def PostAssignView(request, bid_id):
 	cur_bidder = bidders.objects.get(id = bid_id)

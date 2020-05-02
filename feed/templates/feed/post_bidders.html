@@ -9,10 +9,17 @@
               <a class="mr-2" href="{% url 'user-posts' bidder.username.username %}">{{ bidder.username }}</a>
               <p class="text-left">Predicted Completion Date: {{ bidder.date_of_completion|date:"F d, Y" }}</p>
               <p class="text-left"> Required Budget: {{ bidder.budget}} </p>
+              {% if bidder.username.profile.average_rating < 3 %}
+                <p class="text-left text-danger"> Average Rating: {{ bidder.username.profile.average_rating }} </p>
+              {% elif bidder.username.profile.average_rating < 4 %}
+                <p class="text-left text-warning"> Average Rating: {{ bidder.username.profile.average_rating }} </p>
+              {% else %}
+                <p class="text-left text-success"> Average Rating: {{ bidder.username.profile.average_rating }} </p>
+              {% endif %}
             </div>
           </div>
           <div>
-              {% if bidder.service.created_by == user and bidder.service.status == "Need Help"%}
+              {% if bidder.service.created_by == user and bidder.service.status == "Need Help" %}
                 <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-assign' bidder.id%}">Assign</a>
               {% endif %}
           </div>

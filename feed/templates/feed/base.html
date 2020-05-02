@@ -10,8 +10,11 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
     <link rel="stylesheet" type="text/css" href="{% static 'feed/main.css' %}">
+    <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+	<script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
     <!-- static defines absolute url for the static directory and then main.css is loaded. -->
 
     <!-- <title>Hello, world!</title> -->
@@ -49,6 +52,9 @@
 	          		<a class="nav-item nav-link" href="{% url 'user-posts' user.username %}">Started By Me</a>
 	          		<a class="nav-item nav-link" href="{% url 'provider-posts' user.username %}">Assigned to Me</a>
 	          		<a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+	          		<a class="nav-item nav-link" >{{  user.profile.average_rating }}<i class="fas fa-star"></i></a>
+	          		
+
 	          {% else %}
 		          <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
 		          <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
