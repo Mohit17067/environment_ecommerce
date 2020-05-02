@@ -7,6 +7,7 @@ from django.db.models import Q
 from django.core.mail import send_mail
 import os
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from paytm import Checksum
 
@@ -166,6 +167,7 @@ class PostBidView(LoginRequiredMixin, CreateView):
 
 		return super().form_valid(form)
 
+@login_required
 def donate_view(request, pk):
 	form = None
 	if (request.method == 'POST'):
