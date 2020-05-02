@@ -1,4 +1,5 @@
 {% extends "feed/base.html" %}
+{% load ratings %}
 {% block content %}
   <article class="media content-section">
     <img class="rounded-circle article-img" src="{{ object.created_by.profile.image.url }}">
@@ -48,6 +49,22 @@
         <p class="article-content">Complete Info: {{object.complete_info}}</p>
         <img class="account-img" src="{{ object.service_post_Img.url }}">
       </div>
+      <div>
+        {% if object.created_by == user and object.provider == user %}
+        <p class="text-danger"> You Can't Rate. </p>
+        <p class="text-danger"> You Can't provide Feedback </p>    
+        {% elif object.created_by == user %}
+          {% ratings object 20 20 %}
+          <div>
+            <a class="btn btn-success mt-1 mb-1 float-right" href="{% url 'post-feedback' object.id %}">Provide Feedback</a>
+          </div>
+        {% endif %}
+        
+    </div>
+    <br>
+    <div>
+        <p class="article-content">Feedback: {{object.feedback}}</p>
+    </div>
     {% endif %}
     </div>
   </article>

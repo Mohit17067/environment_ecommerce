@@ -1,4 +1,5 @@
-from django.urls import path
+from django.urls import path,include
+from django.conf.urls import url
 from .views import (
     PostListView,
     PostDetailView,
@@ -14,6 +15,7 @@ from .views import (
     DonatorsListView,
     PostAssignView,
     PostCompleteView,
+    PostFeedbackView,
 )
 from . import views
 
@@ -32,5 +34,8 @@ urlpatterns = [
     path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post-delete'),
     path('post/assign/<int:bid_id>/', PostAssignView, name='post-assign'),
     path('post/<int:pk>/complete/', PostCompleteView.as_view(), name='post-complete'),
+    path('post/<int:pk>/feedback/', PostFeedbackView.as_view(), name='post-feedback'),
     path('about/', views.about, name='feed-about'),
+    url(r'^ratings/', include(('star_ratings.urls','ratings'),namespace='ratings')),
 ]
+

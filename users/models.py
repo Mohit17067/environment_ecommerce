@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
+from feed.models import service
 
 # Create your models here.
 
@@ -8,6 +9,22 @@ from PIL import Image
 class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	image = models.ImageField(default='default.png',upload_to="profile_pics")
+
+	@property
+	def average_rating(self):
+		user = self.user
+		sum = 0
+		total = 0
+		for i in range(1,6):
+			set = service.objects.filter(provider=user).filter(status="Completed").filter(provider_rating__isnull=False).filter(provider_rating__total=i)
+			if(len(set)>0):
+				total += len(set)
+				sum += i
+		if(total!=0):
+			return sum/total
+		else:
+			return "No Ratings Yet"
+
 
 	def __str__(self):
 		return f'{self.user.username} Profile'
