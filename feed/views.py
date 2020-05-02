@@ -6,6 +6,9 @@ from django import forms
 from django.db.models import Q
 from django.core.mail import send_mail
 import os
+from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse
+from paytm import Checksum
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
@@ -19,7 +22,7 @@ from django.views.generic import (
 from django.views.generic.edit import FormView, FormMixin
 from .models import service, bidders, donators
 from django.contrib.auth.models import User
-from .forms import provider_form, post_form, search_form
+from .forms import provider_form, post_form, search_form, donate_form
 from bootstrap_datepicker_plus import DatePickerInput
 
 
@@ -32,6 +35,7 @@ from bootstrap_datepicker_plus import DatePickerInput
 # 			'mosquito-killing': 'Mosquito-killing'}
 
 all_tags = ['cleaning','planting','maintenance','grounds','parks','lakes','mosquito-killing']
+MERCHANT_KEY = 'jfCMhJQXl3QR3Bk7'
 
 def home(request):
 
@@ -162,26 +166,55 @@ class PostBidView(LoginRequiredMixin, CreateView):
 
 		return super().form_valid(form)
 
+def donate_view(request, pk):
+	form = None
+	if (request.method == 'POST'):
+		form = donate_form(request.POST)
+		if (form.is_valid()):
+			amount = form.cleaned_data['fund']
+			param_dict = {
+		        'MID': 'hkPHLV65903422792664',
+		        'ORDER_ID': str(pk)+'-'+str(amount)+'-'+str(request.user.id),
+		        'TXN_AMOUNT': str(amount),
+		        'CUST_ID': request.user.email,
+		        'INDUSTRY_TYPE_ID': 'Retail',
+		        'WEBSITE': 'WEBSTAGING',
+		        'CHANNEL_ID': 'WEB',
+		        'CALLBACK_URL':'http://127.0.0.1:8000/post/handle_payment/',
+		        }
+			param_dict['CHECKSUMHASH'] = Checksum.generate_checksum(param_dict, MERCHANT_KEY)
+			return render(request, 'feed/paytm.html', {'param_dict': param_dict})
+	else:
+		form = donate_form()
+	return render(request, 'feed/post_form.html', {'form': form})
 
-class PostDonateView(LoginRequiredMixin, CreateView):
-	model = donators
-	fields = ['fund']
-	template_name = 'feed/post_form.html'
+@csrf_exempt
+def handle_payment(request):
+	form = request.POST
+	response_dict = {}
+	for i in form.keys():
+	    response_dict[i] = form[i]
+	    if i == 'CHECKSUMHASH':
+	        checksum = form[i]
 
-
-	def form_valid(self, form):
-		form.instance.username = self.request.user
-		Service = get_object_or_404(service, id=self.kwargs.get('pk'))
-		form.instance.service = service.objects.filter(id=Service.id).first()
-
-		send_mail(
-			subject="Your Service Got Funds!",
-			message="Hey, Congrats!, your service titled {} got a donation from {}. Refer to the website for more details.".format(Service.title,self.request.user.username),
-			recipient_list=[Service.created_by.email],
-			from_email="environment.ecommerce@gmail.com")
-
-		return super().form_valid(form)
-
+	verify = Checksum.verify_checksum(response_dict, MERCHANT_KEY, checksum)
+	if verify:
+	    if response_dict['RESPCODE'] == '01':
+	        print('Donation successful')
+	        serv_id = response_dict['ORDERID'].split('-')[0]
+	        cur_service = service.objects.get(id = serv_id)
+	        user_id = response_dict['ORDERID'].split('-')[-1]
+	        cur_user = User.objects.get(id = user_id)
+	        donator = donators(username = cur_user, fund = int(float(response_dict['TXNAMOUNT'])), service = cur_service)
+	        donator.save()
+	        send_mail(
+				subject="Your Service Got Funds!",
+				message="Hey, Congrats!, your service titled {} got a donation from {}. Refer to the website for more details.".format(cur_service.title,request.user.username),
+				recipient_list=[cur_service.created_by.email],
+				from_email="environment.ecommerce@gmail.com")
+	    else:
+	        print('Donation was not successful because' + response_dict['RESPMSG'])
+	return render(request, 'feed/paymentstatus.html', {'response': response_dict})
 
 class BiddersListView(ListView):
 	model = bidders
