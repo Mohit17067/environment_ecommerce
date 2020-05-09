@@ -33,6 +33,19 @@
         <p class="article-content">Description: {{ object.content }}</p>
         <p class="article-content">Estimated Budget: {{ object.estimate_budget }}</p>
         <p class="article-content">Estimated Completion Date: {{ object.expected_date_of_completion }}</p>
+        <p class="article-content">Address: {{ object.address }}</p>
+
+
+        <p class="article-map">
+        <div class="panel-body">
+
+                    {% load easy_maps_tags %}
+                    {% easy_map object.address 400 400 %}
+
+
+          </div>
+        </p>
+
         <img class="account-img" src="{{ object.service_pre_Img.url }}">
         {% if object.status == "Need Help" %}
           <p class="article-content text-danger">Status: {{object.status }}</p>
