@@ -18,6 +18,10 @@ ul {
 
 .site-header .navbar-nav .nav-link {
   color: #cbd5db;
+  /*some changes*/
+  border: 1px solid #ffffff;
+  border-radius: 3px;
+  margin: 2px;
 }
 
 .site-header .navbar-nav .nav-link:hover {
@@ -25,7 +29,19 @@ ul {
 }
 
 .site-header .navbar-nav .nav-link.active {
-  font-weight: 500;
+  font-weight: 50;
+
+}
+.side-panel{
+  background-color: #000000;
+  width: 15px;
+
+}
+
+.center{
+  width: 100%; 
+  margin-right:0px; 
+
 }
 
 .content-section {
@@ -34,7 +50,11 @@ ul {
   border: 1px solid #dddddd;
   border-radius: 3px;
   margin-bottom: 20px;
+  
+
+
 }
+
 
 .article-title {
   color: #444444;
@@ -47,12 +67,19 @@ a.article-title:hover {
 
 .article-content {
   white-space: pre-line;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  padding: 2px;
+  display: inline-block;
+  clear:both;
+  float:left;
 }
 
 .article-img {
   height: 65px;
   width: 65px;
   margin-right: 16px;
+
 }
 
 .article-metadata {
@@ -78,12 +105,24 @@ a.article-title:hover {
   margin-right: 20px;
   margin-bottom: 16px;
 }
-
+.pre-img {
+  height: 300px;
+  width: 375px;
+  margin-right: 20px;
+  margin-bottom: 16px;
+  clear:both;
+  float:left;
+  border: 2px solid #dddddd;
+  border-radius: 3px;
+  padding: 5px;
+}
 .post-img {
   height: 1500px;
   width: 150px;
   margin-right: 20px;
   margin-bottom: 16px;
+  clear:both;
+  float:left;
 }
 
 .img-responsive{
@@ -94,4 +133,72 @@ a.article-title:hover {
 
 .account-heading {
   font-size: 2.5rem;
+}
+
+
+.slider-holder
+{
+  width: 800px;
+  height: 400px;
+  background-color: yellow;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: -10px;
+  margin-bottom: 40px;
+  text-align: center;
+  overflow: hidden;
+  box-shadow: 10px 10px 5px grey;
+  }
+        
+.image-holder
+{
+  width: 2400px;
+  background-color: red;
+  height: 400px;
+  clear: both;
+  position: relative;
+  -webkit-transition: left 2s;
+  -moz-transition: left 2s;
+  -o-transition: left 2s;
+  transition: left 2s;
+}
+        
+.slider-image
+{
+  float: left;
+  margin: 0px;
+  padding: 0px;
+  position: relative;
+  height: 400px;
+  width: 800px;
+}
+        
+#slider-image-1:target ~ .image-holder
+{
+  left: 0px;
+}
+        
+#slider-image-2:target ~ .image-holder
+{
+  left: -800px;
+}
+        
+#slider-image-3:target ~ .image-holder
+{
+  left: -1600px;
+}
+        
+.button-holder
+{
+  position: relative;
+  top: -20px;
+}
+        
+.slider-change
+{
+display: inline-block;
+height: 10px;
+width: 10px;
+border-radius: 5px;
+background-color: white;
 }

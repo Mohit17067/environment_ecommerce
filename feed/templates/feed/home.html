@@ -2,11 +2,32 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-	<div class="dropdown">
+
+<div class="slider-holder">
+        <span id="slider-image-1"></span>
+        <span id="slider-image-2"></span>
+        <span id="slider-image-3"></span>
+        <div class="image-holder">
+            <img src="media/2.jpg" class="slider-image" />
+            <img src="media/1.jpg" class="slider-image" />
+            <img src="media/3.jpg" class="slider-image" />
+        </div>
+
+        <div class="button-holder">
+            <a href="#slider-image-1" class="slider-change"></a>
+            <a href="#slider-image-2" class="slider-change"></a>
+            <a href="#slider-image-3" class="slider-change"></a>
+        </div>
+    </div>
+
+
+
+
+	<div class="dropdown" >
 
   <!--Trigger-->
   <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
-    aria-haspopup="true" aria-expanded="false">Search By A Tag</button>
+    aria-haspopup="true" aria-expanded="false" style= "margin-bottom: -20px">Search By A Tag</button>
 
 
   <!--Menu-->
