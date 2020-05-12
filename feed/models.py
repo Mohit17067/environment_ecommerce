@@ -23,6 +23,7 @@ class service(models.Model):
 	service_post_Img = models.ImageField(default='default_incomplete.png',upload_to='after_service/')
 	feedback = models.TextField(default="No Feedback")
 	provider_rating = GenericRelation(Rating)
+	address = models.CharField(max_length=300)
 	# author = models.ForeignKey(User,on_delete=models.CASCADE)
 
 

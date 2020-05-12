@@ -130,7 +130,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 	template_name = 'feed/post_form.html'
 	success_url = '/'
 	form_class = post_form
-
+	
 	def form_valid(self, form):
 		form.instance.created_by = self.request.user
 		return super().form_valid(form)

@@ -10,6 +10,13 @@
                 <legend class="border-bottom mb-4">Post</legend>
                 {{ form|crispy }}
             </fieldset>
+            {% comment %} <div class="panel-body">
+
+                    {% load easy_maps_tags %}
+                    {% easy_map form.address.value 600 600 %}
+
+
+          </div> {% endcomment %}
             <div class="form-group">
                 <button class="btn btn-outline-info" type="submit">Post</button>
             </div>
