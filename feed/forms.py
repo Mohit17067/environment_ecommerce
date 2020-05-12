@@ -40,3 +40,5 @@ class provider_form(forms.ModelForm):
 	class Meta:
 		model = bidders
 		fields = ['username','budget','date_of_completion','service']
+
+
