@@ -79,7 +79,8 @@
 
 	
 
-	<main role="main" class="container">
+	<main role="main" class="container center">
+	
 	  <div class="row">
 	    <div class="col-md-8">
 	      {% if messages %}
@@ -90,8 +91,9 @@
 	      	{% endfor %}
 	      {% endif %}
 	      {% block content %}{% endblock %}
+	      </div>
 	      <!-- this block can be used by child templates such as home.html and about.html. -->
-	    <!-- </div>
+	    <!-- 
 	    <div class="col-md-4">
 	      <div class="content-section">
 	        <h3>Search by clicking the tag</h3>
@@ -104,9 +106,10 @@
 	          </ul>
 	        </p>
 	      </div>
-	    </div>
-	  </div> -->
-	</main>
+	    </div>-->
+	  </div> 
+	  
+		</main>
 
 	<!-- bootstrap starter code below. -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
