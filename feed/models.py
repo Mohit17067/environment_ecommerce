@@ -11,7 +11,7 @@ from star_ratings.models import Rating
 class service(models.Model):
 	title = models.CharField(max_length=100)
 	content = models.TextField()
-	tags = TaggableManager()
+	categories = TaggableManager()
 	created_by = models.ForeignKey(User,on_delete=models.CASCADE,related_name="creator")
 	date_of_creation = models.DateTimeField(default=timezone.now)
 	status = models.CharField(max_length=100,default="Need Help")

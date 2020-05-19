@@ -3,25 +3,23 @@ from .models import bidders, donators, service
 from easy_maps.widgets import AddressWithMapWidget
 
 
-all_tags = (('cleaning', 'Cleaning'),
-			('planting', 'Planting'),
-			('maintenance', 'Maintenance'),
-			('grounds', 'Grounds'),
-			('parks', 'Parks'),
-			('lakes', 'Lakes'),
-			('mosquito-killing', 'Mosquito-killing'))
+all_categories = (('Cleaning of River', 'Cleaning of river'),
+			('Plantation of Trees', 'Plantation of Trees'),
+			('Maintenance of an Area', 'Maintenance of an Area'),
+			('Mosquito-Killing', 'Mosquito-Killing'))
+
 
 class donate_form(forms.Form):
 	fund = forms.IntegerField()
 
 class search_form(forms.Form):
-	tags = forms.MultipleChoiceField(choices = all_tags, widget=forms.CheckboxSelectMultiple, 
-    label="Choose Tags", required=True, error_messages={'required': 'myRequiredMessage'})
+	categories = forms.MultipleChoiceField(choices = all_categories, widget=forms.CheckboxSelectMultiple, 
+    label="Choose Category", required=True, error_messages={'required': 'myRequiredMessage'})
 
 
 class post_form(forms.Form, forms.ModelForm):
-	tags = forms.MultipleChoiceField(choices = all_tags, widget=forms.CheckboxSelectMultiple, 
-    label="Choose Tags", required=True, error_messages={'required': 'myRequiredMessage'})
+	categories = forms.MultipleChoiceField(choices = all_categories, widget=forms.CheckboxSelectMultiple, 
+    label="Choose Category", required=True, error_messages={'required': 'myRequiredMessage'})
 	estimate_budget = forms.IntegerField()
 	address = forms.CharField(max_length=300, required=False)
 
@@ -30,7 +28,7 @@ class post_form(forms.Form, forms.ModelForm):
 		# widgets = {
         #         'address': AddressWithMapWidget({'class': 'vTextField'})
         #     }
-		fields = ['title', 'content', 'tags', 'estimate_budget', 'expected_date_of_completion','service_pre_Img','address']
+		fields = ['title', 'content', 'categories', 'estimate_budget', 'expected_date_of_completion','service_pre_Img','address']
 
 
 class provider_form(forms.ModelForm):

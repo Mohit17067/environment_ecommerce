@@ -7,7 +7,7 @@
       <div class="article-metadata">
         <a class="mr-2" href="{% url 'user-posts' object.created_by.username %}">{{ object.created_by }}</a>
         <small class="text-muted">{{ object.date_of_creation|date:"F d, Y" }}</small>
-        <small class="text-muted">{{ object.tags }}</small>
+        <small class="text-muted">{{ object.categories }}</small>
         <a class="btn btn-info btn-sm mt-1 mb-1 float-right" href="{% url 'show-bidders' object.id %}">Show Bidders</a>
         <a class="btn btn-info btn-sm mt-1 mb-1 float-right" href="{% url 'show-donators' object.id %}">Show Donators</a>
         {% if object.provider == user and object.status == "Assigned" %}

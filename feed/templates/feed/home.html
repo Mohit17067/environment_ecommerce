@@ -3,23 +3,33 @@
 {% block content %}
 
 
-<div class="slider-holder">
-        <span id="slider-image-1"></span>
-        <span id="slider-image-2"></span>
-        <span id="slider-image-3"></span>
-        <div class="image-holder">
-            <img src="media/2.jpg" class="slider-image" />
-            <img src="media/1.jpg" class="slider-image" />
-            <img src="media/3.jpg" class="slider-image" />
-        </div>
 
-        <div class="button-holder">
-            <a href="#slider-image-1" class="slider-change"></a>
-            <a href="#slider-image-2" class="slider-change"></a>
-            <a href="#slider-image-3" class="slider-change"></a>
-        </div>
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="d-block w-100 fit-image" src="media/2.jpg" alt="First slide">
     </div>
-
+    <div class="carousel-item">
+      <img class="d-block w-100 fit-image" src="media/1.jpg" alt="Second slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100 fit-image" src="media/3.jpg" alt="Third slide">
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
 
 
 
@@ -27,12 +37,12 @@
 
   <!--Trigger-->
   <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
-    aria-haspopup="true" aria-expanded="false" style= "margin-bottom: -20px">Search By A Tag</button>
+    aria-haspopup="true" aria-expanded="false" style= "margin-bottom: -20px">Search By A Category</button>
 
 
   <!--Menu-->
   <div class="dropdown-menu dropdown-primary">
-    {% for tag in tags %}
+    {% for tag in categories %}
 	    <a class="dropdown-item" href="{% url 'tag-posts' tag %}">{{ tag }}</a>
 <!-- 	    <a class="dropdown-item" href="#">Another action</a>
 	    <a class="dropdown-item" href="#">Something else here</a>

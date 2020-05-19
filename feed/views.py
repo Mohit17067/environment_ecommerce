@@ -35,7 +35,7 @@ from bootstrap_datepicker_plus import DatePickerInput
 # 			'lakes': 'Lakes',
 # 			'mosquito-killing': 'Mosquito-killing'}
 
-all_tags = ['cleaning','planting','maintenance','grounds','parks','lakes','mosquito-killing']
+all_categories = ['Cleaning of River','Plantation of Trees','Maintenance of an Area','Mosquito-Killing']
 MERCHANT_KEY = 'jfCMhJQXl3QR3Bk7'
 
 def home(request):
@@ -58,7 +58,7 @@ class PostListView(FormMixin, ListView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		context['tags'] = all_tags
+		context['categories'] = all_categories
 		return context
 
 
@@ -117,7 +117,7 @@ class TagPostListView(ListView):
 	def get_queryset(self):
 		tag=self.kwargs.get('text')
 		# tag = get_object_or_404(post, username=self.kwargs.get('text'))
-		return service.objects.filter(tags__name__in=[tag]).distinct().order_by('-date_of_creation')
+		return service.objects.filter(categories__name__in=[tag]).distinct().order_by('-date_of_creation')
 
 
 class PostDetailView(DetailView):
@@ -244,7 +244,7 @@ class DonatorsListView(ListView):
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	model = service
-	fields = ['title', 'content', 'tags', 'estimate_budget','expected_date_of_completion','service_pre_Img']
+	fields = ['title', 'content', 'Categories', 'estimate_budget','expected_date_of_completion','service_pre_Img']
 	template_name = 'feed/post_form.html'
 
 	def form_valid(self, form):
