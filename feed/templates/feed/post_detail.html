@@ -7,7 +7,7 @@
       <div class="article-metadata">
         <a class="mr-2" href="{% url 'user-posts' object.created_by.username %}">{{ object.created_by }}</a>
         <small class="text-muted">{{ object.date_of_creation|date:"F d, Y" }}</small>
-        <small class="text-muted">{{ object.tags }}</small>
+        <small class="text-muted">{{ object.categories }}</small>
         <a class="btn btn-info btn-sm mt-1 mb-1 float-right" href="{% url 'show-bidders' object.id %}">Show Bidders</a>
         <a class="btn btn-info btn-sm mt-1 mb-1 float-right" href="{% url 'show-donators' object.id %}">Show Donators</a>
         {% if object.provider == user and object.status == "Assigned" %}
@@ -59,8 +59,34 @@
       </div>
       {% if object.status == "Completed" %}
       <div>
-        <p class="article-content">Complete Info: {{object.complete_info}}</p>
-        <img class="account-img" src="{{ object.service_post_Img.url }}">
+        {% if object.categories == "Mosquito-Killing" %}
+          <p class="article-content text-info">Spray Used: {{ object.complete_info.spray_used }}</p>
+          <p class="article-content text-info">Quantity of Spray: {{ object.complete_info.quantity_applied }} ml </p>
+          <p class="article-content text-info">Elimination of Standing Water: {{ object.complete_info.eliminated_standing_water }}</p>
+          <p class="article-content text-info">Natural Repallant Used: {{ object.complete_info.natural_repallant }}</p>
+          <p class="article-content text-info">Name of Natural Repallant: {{ object.complete_info.repallant_name }}</p>
+
+        {% elif object.categories == "Pond Cleaning" %}
+          <p class="article-content text-info">Drainage Done: {{ object.complete_info.drainage_done }}</p>
+          <p class="article-content text-info">Automatic Skimmer: {{ object.complete_info.automatic_skimmer }}</p>
+          <p class="article-content text-info">Pond Net Usage: {{ object.complete_info.pond_net_used }}</p>
+          <p class="article-content text-info">Vaccum Done: {{ object.complete_info.vaccum }}</p>
+          <p class="article-content text-info">Beneficial Bacteria Supplied: {{ object.complete_info.beneficial_bacteria }}</p>
+          <p class="article-content text-info">Algae Treatment: {{ object.complete_info.algae_treatment }}</p>
+
+        {% elif object.categories == "Tree Planting" %}
+          <p class="article-content text-info">Fertilizers Used: {{ object.complete_info.fertilizer_used }}</p>
+          <p class="article-content text-info">Plant Variety: {{ object.complete_info.plant_variety }}</p>
+          <p class="article-content text-info">Quantity of Water Supplied: {{ object.complete_info.water_quantity }} ml </p>
+          <p class="article-content text-info">Depth of Soil Dug: {{ object.complete_info.depth_dug }} feet </p>
+          <p class="article-content text-info">Residential Obstruction Caused: {{ object.complete_info.residential_obstruction }}</p>
+
+        {% endif %}
+
+      </div>
+      <div>
+        <p class="article-content text-info">Other Info: {{ object.complete_info.other_info }} </p>
+        <img class="account-img" src="{{ object.complete_info.service_post_Img.url }}">
       </div>
       <div>
         {% if object.created_by == user and object.provider == user %}

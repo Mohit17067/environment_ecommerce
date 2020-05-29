@@ -202,3 +202,9 @@ width: 10px;
 border-radius: 5px;
 background-color: white;
 }
+
+.fit-image{
+width: 100%;
+object-fit: cover;
+height: 400px; /* only if you want fixed height */
+}

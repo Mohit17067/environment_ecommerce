@@ -1,4 +1,5 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.utils import timezone
@@ -7,7 +8,8 @@ from django.db.models import Q
 from django.core.mail import send_mail
 import os
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required,user_passes_test
 from django.urls import reverse
 from paytm import Checksum
 
@@ -21,9 +23,9 @@ from django.views.generic import (
 )
 
 from django.views.generic.edit import FormView, FormMixin
-from .models import service, bidders, donators
+from .models import service, bidders, donators, feedback_mosquitokilling
 from django.contrib.auth.models import User
-from .forms import provider_form, post_form, search_form, donate_form
+from .forms import provider_form, post_form, search_form, donate_form, mosquitokilling, pondcleaning, treeplantating, otherservices
 from bootstrap_datepicker_plus import DatePickerInput
 
 
@@ -35,7 +37,7 @@ from bootstrap_datepicker_plus import DatePickerInput
 # 			'lakes': 'Lakes',
 # 			'mosquito-killing': 'Mosquito-killing'}
 
-all_tags = ['cleaning','planting','maintenance','grounds','parks','lakes','mosquito-killing']
+all_categories = ['Pond Cleaning','Tree Planting','Maintenance of an Area','Mosquito-Killing']
 MERCHANT_KEY = 'jfCMhJQXl3QR3Bk7'
 
 def home(request):
@@ -58,7 +60,7 @@ class PostListView(FormMixin, ListView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		context['tags'] = all_tags
+		context['categories'] = all_categories
 		return context
 
 
@@ -117,7 +119,7 @@ class TagPostListView(ListView):
 	def get_queryset(self):
 		tag=self.kwargs.get('text')
 		# tag = get_object_or_404(post, username=self.kwargs.get('text'))
-		return service.objects.filter(tags__name__in=[tag]).distinct().order_by('-date_of_creation')
+		return service.objects.filter(categories__name__in=[tag]).distinct().order_by('-date_of_creation')
 
 
 class PostDetailView(DetailView):
@@ -244,7 +246,7 @@ class DonatorsListView(ListView):
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	model = service
-	fields = ['title', 'content', 'tags', 'estimate_budget','expected_date_of_completion','service_pre_Img']
+	fields = ['title', 'content', 'Categories', 'estimate_budget','expected_date_of_completion','service_pre_Img']
 	template_name = 'feed/post_form.html'
 
 	def form_valid(self, form):
@@ -262,33 +264,53 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 		if self.request.user == service.created_by:
 			return True
 		return False
-
-class PostCompleteView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-	model = service
-	fields = ['complete_info', 'service_post_Img']
-	template_name = 'feed/post_form.html'
-
-	def form_valid(self, form):
-		form.instance.status = "Completed"
-		send_mail(
-			subject="Service Completed",
-			message="Your service titled {} has been completed. Refer to the website for more details.".format(form.instance.title),
-			recipient_list=[form.instance.created_by.email],
-			from_email="environment.ecommerce@gmail.com")
-
-		return super().form_valid(form)
-
-	def get_form(self):
-		form = super(PostCompleteView, self).get_form()
-		return form
-
-
-	def test_func(self):
-		service = self.get_object()
-		if self.request.user == service.provider:
-			return True
-		return False
 	
+
+@login_required
+def PostCompleteView(request,pk):
+	Service = get_object_or_404(service,pk=pk)
+	category = Service.categories
+	
+	form = None
+	if(category=="Mosquito-Killing"):
+		form = mosquitokilling()
+	elif(category=="Pond Cleaning"):
+		form = pondcleaning()
+	elif(category=="Tree Planting"):
+		form = treeplantating()
+	else:
+		form = otherservices()
+
+	if(request.user==Service.provider):
+		if(request.method == "POST"):
+
+			if(category=="Mosquito-Killing"):
+				form = mosquitokilling(request.POST)
+			elif(category=="Pond Cleaning"):
+				form = pondcleaning(request.POST)
+			elif(category=="Tree Planting"):
+				form = treeplantating(request.POST)
+			else:
+				form = otherservices(request.POST)
+
+			if(form.is_valid()):
+				form.instance.service = Service
+				Service.status = "Completed"
+				Service.save()
+				form.save()
+				send_mail(
+				subject="Service Completed",
+				message="Your service titled {} has been completed. Refer to the website for more details.".format(form.instance.service.title),
+				recipient_list=[form.instance.service.created_by.email],
+				from_email="environment.ecommerce@gmail.com")
+
+				return redirect('post-detail',pk=pk)
+		else:
+			return render(request,'feed/post_form.html',{'form':form})
+	else:
+
+		messages.error(request,"You can't complete this Service")
+		return redirect('post_detai',pk=pk)
 
 class PostFeedbackView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 	model = service
