@@ -32,7 +32,6 @@
 </div>
 
 
-
 	<div class="dropdown" >
 
   <!--Trigger-->
@@ -44,31 +43,17 @@
   <div class="dropdown-menu dropdown-primary">
     {% for tag in categories %}
 	    <a class="dropdown-item" href="{% url 'tag-posts' tag %}">{{ tag }}</a>
-<!-- 	    <a class="dropdown-item" href="#">Another action</a>
-	    <a class="dropdown-item" href="#">Something else here</a>
-	    <a class="dropdown-item" href="#">Separated link</a> -->
 	    {% endfor %}
+
+      
+
   </div>
+
+
 </div>
 
-	<br>
-	<br>
-
-
-	<!-- <div class="content-section">
-        <form method="POST">
-            {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Search with Tags</legend>
-                {{ form | crispy }}
-            </fieldset>
-            <div class="form-group">
-                <a class="btn btn-outline-info" href="#" type="submit">tag</a>
-            	
-            </div>
-        </form>
-    </div> -->
-
+    <br>
+    <br>
     <br>
     <br>
 
@@ -82,6 +67,7 @@
 		      <small class="text-muted">{{ post.date_of_creation|date:"F d, Y" }}</small>
 		    </div>
 		    <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+        <p class="article-content">Address: {{ post.address }}</p>
 		    <p class="article-content">Estimated Budget: {{ post.estimate_budget }}</p>
 		    <p class="article-content">Status: {{post.status }}</p>
 		  </div>

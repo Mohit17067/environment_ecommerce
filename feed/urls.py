@@ -15,6 +15,7 @@ from .views import (
     PostAssignView,
     PostCompleteView,
     PostFeedbackView,
+    LocationPostListView,
 )
 from . import views
 
@@ -23,6 +24,7 @@ urlpatterns = [
     path('user/<str:username>', UserPostListView.as_view(), name='user-posts'),
     path('provider/<str:username>', ProviderPostListView.as_view(), name='provider-posts'),
     path('<str:text>', TagPostListView.as_view(), name='tag-posts'),
+    path('search/', LocationPostListView.as_view(), name='location-posts'),
     path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
     path('post/<int:pk>/bid', PostBidView.as_view(), name='post-bid'),
     path('post/<int:pk>/donate', views.donate_view, name='post-donate'),
