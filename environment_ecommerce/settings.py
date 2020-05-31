@@ -45,9 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'easy_maps',
-    'dal',
-    'dal_select2'
+    'easy_maps'
 ]
 
 EASY_MAPS_GOOGLE_KEY = 'AIzaSyATg_isuGSCHIlJamrxAXfkFDTYhIz7ytM'
