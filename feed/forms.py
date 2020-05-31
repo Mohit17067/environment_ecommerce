@@ -1,6 +1,7 @@
 from django import forms
 from .models import bidders, donators, service, feedback_mosquitokilling, completion_pondcleaning, completion_treeplantation, completion
 from easy_maps.widgets import AddressWithMapWidget
+from dal import autocomplete
 
 
 all_categories = (('Pond Cleaning', 'Pond Cleaning'),
@@ -74,3 +75,11 @@ class otherservices(forms.ModelForm):
 	class Meta:
 		model = completion
 		fields = ['other_info','service_post_Img']
+
+
+class location_form(forms.ModelForm):
+	address = forms.ModelChoiceField(label="Search By Location",queryset=service.objects.all(),widget=autocomplete.ModelSelect2(url='location-posts'))
+
+	class Meta:
+		model = service
+		fields = ['address']

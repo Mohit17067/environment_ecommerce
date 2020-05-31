@@ -1,0 +1,12 @@
+{% if posts.count > 0 %}
+
+{% for post in posts %}
+	<li><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.address }}</a> </li>
+
+{% endfor %}
+
+{% else %}
+
+<li>No Services!</li>
+
+{% endif %}

@@ -11,6 +11,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.urls import reverse
+from dal import autocomplete
+import json
 from paytm import Checksum
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -25,7 +27,7 @@ from django.views.generic import (
 from django.views.generic.edit import FormView, FormMixin
 from .models import service, bidders, donators, feedback_mosquitokilling
 from django.contrib.auth.models import User
-from .forms import provider_form, post_form, search_form, donate_form, mosquitokilling, pondcleaning, treeplantating, otherservices
+from .forms import provider_form, post_form, search_form, donate_form, mosquitokilling, pondcleaning, treeplantating, otherservices, location_form
 from bootstrap_datepicker_plus import DatePickerInput
 
 
@@ -53,7 +55,7 @@ class PostListView(FormMixin, ListView):
 	template_name = 'feed/home.html'  # <app>/<model>_<viewtype>.html
 	context_object_name = 'posts'
 	paginate_by = 5
-	form_class = search_form
+	form_class = location_form
 
 	def get_queryset(self):
 		return service.objects.filter(status="Need Help").order_by('-date_of_creation')
@@ -62,30 +64,6 @@ class PostListView(FormMixin, ListView):
 		context = super().get_context_data(**kwargs)
 		context['categories'] = all_categories
 		return context
-
-
-
-	# def form_valid(self,form):
-	# 	tags = form.instance.tags
-	# 	# context['tags'] = tags
-	# 	# print(context)
-	# 	print(tags)
-	# 	return super().form_valid(form)
-	# context = {'posts':service.objects.all().order_by('-date_of_creation') , 'tags':super(self).get_context_data()}
-
-	# def get_context_data(self, *args, **kwargs):
-	# 	context = super(PostListView, self).get_context_data(*args, **kwargs)
-	# 	print(context)
-	# 	posts = service.objects.all().order_by('-date_of_creation')
-	# 	context = super(self).get_context_data(*args, **kwargs)
-	# 	print(context)
-	# 	# for tags in self.get_form().cleaned_data.get('tags'):
-	# 	# 	print(tags)
-	# 	context['tags'] = context
-	# 	context['posts'] = posts
-	# 	print(context['tags'])
-	# 	return context
-
 
 
 class UserPostListView(ListView):
@@ -121,6 +99,17 @@ class TagPostListView(ListView):
 		# tag = get_object_or_404(post, username=self.kwargs.get('text'))
 		return service.objects.filter(categories__name__in=[tag]).distinct().order_by('-date_of_creation')
 
+
+class LocationPostListView(ListView):
+	model = service
+	template_name = 'feed/user_posts.html'
+	context_object_name = 'posts'
+	paginate_by = 5
+
+	def get_queryset(self):
+		location = self.request.GET.get('location')
+		qs = service.objects.filter(status="Need Help").filter(address__icontains=location)
+		return qs
 
 class PostDetailView(DetailView):
     model = service
