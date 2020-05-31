@@ -11,8 +11,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.urls import reverse
-from dal import autocomplete
-import json
 from paytm import Checksum
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -27,7 +25,7 @@ from django.views.generic import (
 from django.views.generic.edit import FormView, FormMixin
 from .models import service, bidders, donators, feedback_mosquitokilling
 from django.contrib.auth.models import User
-from .forms import provider_form, post_form, search_form, donate_form, mosquitokilling, pondcleaning, treeplantating, otherservices, location_form
+from .forms import provider_form, post_form, search_form, donate_form, mosquitokilling, pondcleaning, treeplantating, otherservices
 from bootstrap_datepicker_plus import DatePickerInput
 
 
@@ -50,12 +48,11 @@ def home(request):
 															# the argument context now will be accessible in the template html file.
 
 
-class PostListView(FormMixin, ListView):
+class PostListView(ListView):
 	model = service
 	template_name = 'feed/home.html'  # <app>/<model>_<viewtype>.html
 	context_object_name = 'posts'
 	paginate_by = 5
-	form_class = location_form
 
 	def get_queryset(self):
 		return service.objects.filter(status="Need Help").order_by('-date_of_creation')
@@ -110,6 +107,11 @@ class LocationPostListView(ListView):
 		location = self.request.GET.get('location')
 		qs = service.objects.filter(status="Need Help").filter(address__icontains=location)
 		return qs
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['search_query'] = self.request.GET.get('location')
+		return context
 
 class PostDetailView(DetailView):
     model = service
