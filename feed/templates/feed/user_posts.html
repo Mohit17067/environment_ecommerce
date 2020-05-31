@@ -1,8 +1,11 @@
 {% extends "feed/base.html" %}
 {% block content %}
+
+<br>
+<br>
     <h1 class="mb-3">Services-{{ view.kwargs.username }} ({{ page_obj.paginator.count }})</h1>
     {% if search_query is not None %}
-    <h1 class="mb-3"><mark>{{ search_query }}</mark></h1>
+    <h2 class="mb-3"><mark>Services At: {{ search_query }}</mark></h1>
     {% endif %}
     {% for post in posts %}
       <article class="media content-section">

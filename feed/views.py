@@ -94,7 +94,7 @@ class TagPostListView(ListView):
 	def get_queryset(self):
 		tag=self.kwargs.get('text')
 		# tag = get_object_or_404(post, username=self.kwargs.get('text'))
-		return service.objects.filter(categories__name__in=[tag]).distinct().order_by('-date_of_creation')
+		return service.objects.filter(categories=tag).distinct().order_by('-date_of_creation')
 
 
 class LocationPostListView(ListView):
