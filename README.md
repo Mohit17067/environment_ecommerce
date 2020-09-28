@@ -15,7 +15,7 @@ The project strictly follows Django Architecture. Use [this tutorial](https://me
 There are 2 Django Apps in the project:
   * **users** - Handles the profile of users in the application and other login features. This uses Django [users](https://docs.djangoproject.com/en/3.1/ref/contrib/auth/) model.
   * **feed** - Handles the user feed in the application for all services. The code for database can be found out in [models.py](https://github.com/Mohit17067/environment_ecommerce/blob/master/feed/models.py) of feed application.<br>
-    HTML files can be found in [templates.py](https://github.com/Mohit17067/environment_ecommerce/tree/master/feed/templates/feed) of feed application which handles all the user interface for the application.<br>
+    HTML files can be found in [templates](https://github.com/Mohit17067/environment_ecommerce/tree/master/feed/templates/feed) folder of feed application which handles all the user interface for the application.<br>
     [urls.py](https://github.com/Mohit17067/environment_ecommerce/blob/master/feed/urls.py) contains all the urls in the web-application and the corresponding controller methods.<br>
     [views.py](https://github.com/Mohit17067/environment_ecommerce/blob/master/feed/views.py) contains all the class view controller methods for the feed application.<br>
     [forms.py](https://github.com/Mohit17067/environment_ecommerce/blob/master/feed/forms.py) contains all the customised forms which are used at various places(login/registeration, service creation etc) in the application.<br>
