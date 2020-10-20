@@ -5,6 +5,7 @@ People facing a certain environmental issue in their locality just need to login
 ## Requirement
 Django is the basic requirement for the project
 All the requirements can be found in `requirements.txt` in the project root folder and can be installed with `pip3 install -r requirements.txt`. `pip` in required for the same.
+**To Run the project:** Use `python manage.py runserver`
 
 ## Functionality
 Refer [ppt here](https://docs.google.com/presentation/d/1KZTJOCgC-inyOFpb1xzQI-1aHEAy9aiKQjQ78_tvess/edit?usp=sharing) for this.
